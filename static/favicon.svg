@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="16" cy="16" r="15" fill="#4f46e5" stroke="#ffffff" stroke-width="2"/>
+  
+  <!-- Document/page icon -->
+  <rect x="8" y="6" width="12" height="16" rx="1" fill="#ffffff"/>
+  
+  <!-- Lines representing text/content -->
+  <line x1="10" y1="10" x2="18" y2="10" stroke="#4f46e5" stroke-width="1"/>
+  <line x1="10" y1="12" x2="16" y2="12" stroke="#4f46e5" stroke-width="1"/>
+  <line x1="10" y1="14" x2="18" y2="14" stroke="#4f46e5" stroke-width="1"/>
+  <line x1="10" y1="16" x2="14" y2="16" stroke="#4f46e5" stroke-width="1"/>
+  
+  <!-- Small gear icon representing configuration -->
+  <circle cx="22" cy="10" r="3" fill="#ffffff"/>
+  <circle cx="22" cy="10" r="1.5" fill="#4f46e5"/>
+  <path d="M22 7 L22 8 M22 12 L22 13 M25 10 L24 10 M20 10 L19 10 M23.5 8.5 L22.5 9.5 M20.5 9.5 L19.5 8.5 M23.5 11.5 L22.5 10.5 M20.5 10.5 L19.5 11.5" stroke="#4f46e5" stroke-width="0.5"/>
+</svg>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Page Handler</title>
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('serve_static', filename='favicon.svg') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('serve_static', filename='favicon.ico') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('serve_static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="sidebar">
+                <h2>Available Pages 
+                    <button id="helpBtn" class="help-btn" title="Help">❓</button>
+                    <button id="configBtn" class="config-btn" title="Configuration">⚙️</button>
+                </h2>
+        <div class="page-list-container">
+            <ul class="page-list">
+                {% for page in pages %}
+                <li class="page-item">
+                    <a href="{{ page.url }}" class="page-link" data-page="{{ page.directory }}">{{ page.name }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="variables-editor">
+            <h3>Variable Sets</h3>
+            <select id="variablesSelect" class="variables-select">
+                <option value="">Select a variable set...</option>
+            </select>
+            <div class="variables-actions">
+                <button id="editVariablesBtn" class="variables-btn edit-btn">Edit Sets</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="resizer" id="resizer"></div>
+
+    <div class="main-content">
+        <div class="iframe-container">
+            <iframe id="pageFrame" src="about:blank"></iframe>
+            <div class="no-page-selected">
+                <h2>No Page Selected</h2>
+                <p>Select a page from the list on the left to view its content.</p>
+            </div>
+            <div class="new-tab-mode-message" style="display: none;">
+                <h2>New Tab Mode Active</h2>
+                <p>Pages are opening in new tabs. Check the configuration to change this behavior.</p>
+            </div>
+        </div>
+        <div class="message-log-resizer" id="messageLogResizer"></div>
+        <div class="message-log">
+            <div class="message-log-header">
+                <h3>Message Log</h3>
+                <div class="message-log-controls">
+                    <button id="toggleLogBtn" class="toggle-log-btn" title="Toggle Message Log">
+                        <span class="toggle-icon">▼</span>
+                    </button>
+                <button id="clearLogBtn" class="clear-log-btn">Clear Log</button>
+                </div>
+            </div>
+            <div id="logContent" class="log-content"></div>
+        </div>
+    </div>
+
+    <!-- Variable Sets Modal -->
+    <div id="variablesModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Manage Variable Sets</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            
+            <!-- Variable Set Form -->
+            <form id="variableSetForm" class="variable-set-form" style="display: none;">
+                <div class="form-group">
+                    <label for="setName">Set Name</label>
+                    <input type="text" id="setName" required>
+                </div>
+                <div class="form-group">
+                    <label for="setVariables">Variables (JSON)</label>
+                    <textarea id="setVariables" required></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="modal-btn cancel-btn" id="cancelSetBtn">Cancel</button>
+                    <button type="submit" class="modal-btn save-btn" id="saveSetBtn">Save Set</button>
+                    <button type="button" class="modal-btn delete-btn" id="deleteSetBtn" style="display: none;">Delete Set</button>
+                </div>
+            </form>
+
+            <!-- Variable Sets List -->
+            <div id="variableSetsList" class="variable-sets-list">
+                <!-- Variable sets will be listed here -->
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; margin-top: 1rem;">
+                <button id="addSetBtn" class="add-set-btn">Add Variable Set</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Configuration Modal -->
+    <div id="configModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Configuration</h3>
+                <button class="close-modal" id="closeConfigModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="config-item">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="displayInlineCheckbox">
+                        <span class="checkmark"></span>
+                        Display Custom Page inline (not in new Brower Tab)
+                    </label>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button id="saveConfigBtn" class="btn btn-primary">Save</button>
+                <button id="cancelConfigBtn" class="btn btn-secondary">Cancel</button>
+            </div>
+        </div>
+                    </div>
+
+    <script src="{{ url_for('serve_static', filename='js/script.js') }}"></script>
+</body>
+</html> 

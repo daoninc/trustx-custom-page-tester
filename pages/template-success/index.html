@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Incorrect Code</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        .success-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: #4ade80;
+        }
+        
+        .continue-btn {
+            display: inline-block;
+            margin-top: 1.5rem;
+            padding: 0.75rem 1.5rem;
+            background-color: var(--accent-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            transition: background-color 0.2s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .continue-btn:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .continue-btn.hidden {
+            display: none;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="success-icon">✅</div>
+            <h1 id="success-title"></h1>
+            <p id="success-message" class="subtitle"></p>
+            
+            <button id="continueBtn" class="continue-btn hidden">Continue</button>
+        </div>
+    </div>
+
+    <script>
+        // Notify parent when page is loaded
+        window.addEventListener('load', () => {
+            window.parent.postMessage({ event: 'READY' }, '*');
+        });
+
+        window.addEventListener('message', (event) => {
+            console.log('template-success message received', event.data);
+            const constants = event.data.variables?.constants;
+            const successTitle = constants?.successTitle;
+            const successSubtitle = constants?.successSubtitle;
+            const showContinueButton = constants?.showContinueButton;
+            
+            if (successTitle) {
+                document.getElementById('success-title').textContent = successTitle;
+            } else {
+                document.getElementById('success-title').textContent = 'Success';
+            }
+            if (successSubtitle) {
+                document.getElementById('success-message').textContent = successSubtitle;
+            } else {
+                document.getElementById('success-message').textContent = 'The operation was successful.';
+            }
+            
+            // Show/hide continue button based on constants
+            const continueBtn = document.getElementById('continueBtn');
+            if (showContinueButton) {
+                continueBtn.classList.remove('hidden');
+            } else {
+                continueBtn.classList.add('hidden');
+            }
+        });
+
+        // Handle continue button click
+        document.getElementById('continueBtn').addEventListener('click', () => {
+            window.parent.postMessage({ 
+                event: 'SEND', 
+                variables: { 
+                    message: 'continue'
+                }
+            }, '*');
+        });
+    </script>
+</body>
+</html> 

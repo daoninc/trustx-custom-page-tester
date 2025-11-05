@@ -1,0 +1,122 @@
+:root {
+    --bg-color: #0f172a;
+    --card-bg: #1e293b;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --accent-color: #3b82f6;
+    --accent-hover: #2563eb;
+    --input-bg: #334155;
+    --error-color: #ef4444;
+    --success-color: #22c55e;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1.5;
+}
+
+.container {
+    width: 100%;
+    max-width: 480px;
+    padding: 1rem;
+}
+
+.card {
+    background-color: var(--card-bg);
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+h1 {
+    font-size: 1.875rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.subtitle {
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+}
+
+.email-form {
+    width: 100%;
+}
+
+.input-group {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+input[type="email"] {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border: 2px solid var(--input-bg);
+    border-radius: 0.5rem;
+    background-color: var(--input-bg);
+    color: var(--text-primary);
+    font-size: 1rem;
+    transition: border-color 0.2s ease;
+}
+
+input[type="email"]:focus {
+    outline: none;
+    border-color: var(--accent-color);
+}
+
+input[type="email"]::placeholder {
+    color: var(--text-secondary);
+}
+
+.submit-btn {
+    font-size: 1rem;    
+    padding: 0.75rem 1.5rem;
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.submit-btn:hover {
+    background-color: var(--accent-hover);
+}
+
+.message {
+    font-size: 0.875rem;
+    min-height: 1.25rem;
+    transition: opacity 0.3s ease;
+}
+
+.message.error {
+    color: var(--error-color);
+}
+
+.message.success {
+    color: var(--success-color);
+}
+
+@media (max-width: 480px) {
+    .input-group {
+        flex-direction: column;
+    }
+    
+    .submit-btn {
+        width: 100%;
+    }
+} 

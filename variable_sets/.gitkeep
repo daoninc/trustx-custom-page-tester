@@ -1,0 +1,2 @@
+# This file ensures the variable_sets directory is tracked by git
+# Variable set JSON files are ignored but this directory structure is preserved

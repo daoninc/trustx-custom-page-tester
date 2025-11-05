@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Page Handler - Help</title>
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('serve_static', filename='favicon.svg') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('serve_static', filename='favicon.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('serve_static', filename='css/help.css') }}">
+</head>
+<body>
+    <div class="help-container">
+        <header class="help-header">
+            <h1>📚 Custom Page Handler - User Guide</h1>
+            <button id="closeHelpBtn" class="close-help-btn" title="Close Help">✕</button>
+        </header>
+
+        <main class="help-content">
+            <section class="help-section">
+                <h2>🎯 Getting Started</h2>
+                <p>Welcome to the Custom Page Handler! This application allows you to manage, and display custom web pages with dynamic variable support.</p>
+            </section>
+
+            <section class="help-section">
+                <h2>📁 Creating Custom Pages</h2>
+                <div class="help-card">
+                    <h3>Directory Structure</h3>
+                    <p>Custom pages are stored in the <code>pages/</code> directory. Each custom page must be in its own subdirectory:</p>
+                    <div class="code-block">
+                        <pre>pages/
+├── my-custom-page/
+│   ├── index.html          # Required: Main page file
+│   ├── styles.css          # Optional: Custom styles
+│   ├── script.js           # Optional: Custom JavaScript
+│   └── images/             # Optional: Images and assets
+├── another-page/
+│   └── index.html
+└── ...</pre>
+                    </div>
+                </div>
+
+                <div class="help-card">
+                    <h3>Required Files</h3>
+                    <ul>
+                        <li><strong>index.html</strong> - The main HTML file for your custom page</li>
+                        <li>Additional CSS, JavaScript, and asset files are optional</li>
+                    </ul>
+                </div>
+
+                <div class="help-card">
+                    <h3>Page Requirements</h3>
+                    <ul>
+                        <li>Each page directory must contain at least an <code>index.html</code> file</li>
+                        <li>Pages will automatically appear in the "Available Pages" list</li>
+                        <li>Pages can receive variables from the main application</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="help-section">
+                <h2>🔧 Variable Sets Management</h2>
+                <div class="help-card">
+                    <h3>What are Variable Sets?</h3>
+                    <p>Variable sets are collections of key-value pairs that can be sent to your custom pages. They allow you to:</p>
+                    <ul>
+                        <li>Pass dynamic data to your pages</li>
+                        <li>Test different scenarios</li>
+                        <li>Customize page behavior</li>
+                    </ul>
+                </div>
+
+                <div class="help-card">
+                    <h3>Creating Variable Sets</h3>
+                    <ol>
+                        <li>Click the <strong>"Variable Sets"</strong> button in the main interface</li>
+                        <li>Click <strong>"Create New Set"</strong></li>
+                        <li>Enter a name for your variable set</li>
+                        <li>Add variables in JSON format:
+                            <div class="code-block">
+                                <pre>{
+    "sessionData": {
+        "key": "value"
+    },
+    "constants": {
+        "key": "value"
+    }
+}</pre>
+                            </div>
+                        </li>
+                        <li>Click <strong>"Save"</strong></li>
+                    </ol>
+                </div>
+
+                <div class="help-card">
+                    <h3>Managing Variable Sets</h3>
+                    <ul>
+                        <li><strong>Select:</strong> Choose a variable set from the dropdown to use it</li>
+                        <li><strong>Edit:</strong> Click the edit button to modify existing sets</li>
+                        <li><strong>Delete:</strong> Click the delete button to remove sets</li>
+                        <li><strong>Storage:</strong> Variable sets are stored in the <code>variable_sets/</code> directory as JSON files</li>
+                    </ul>
+                </div>
+
+                <div class="help-card">
+                    <h3>Using Variables in Your Pages</h3>
+                    <p>Your custom pages can receive variables through the messaging system:</p>
+                    <div class="code-block">
+                        <pre>// Listen for messages from the main page
+window.addEventListener('message', function(event) {
+    const variables = event.data.variables;
+    console.log('Received variables:', variables);
+    
+    // Use the variables in your page
+    document.getElementById('name').textContent = variables.name;
+    document.getElementById('email').textContent = variables.email;
+});
+
+// Send READY message when page is loaded
+window.parent.postMessage({ event: 'READY' }, '*');</pre>
+                    </div>
+                </div>
+            </section>
+
+            <section class="help-section">
+                <h2>🖥️ Display Modes</h2>
+                <div class="help-card">
+                    <h3>Inline Mode (Default)</h3>
+                    <p>Pages are displayed within the main application interface:</p>
+                    <ul>
+                        <li>✅ Integrated experience</li>
+                        <li>✅ Single window interface</li>
+                        <li>✅ Easy navigation</li>
+                    </ul>
+                </div>
+
+                <div class="help-card">
+                    <h3>New Tab Mode</h3>
+                    <p>Pages open in separate browser tabs with enhanced debugging capabilities:</p>
+                    <ul>
+                        <li>🔧 <strong>Browser Developer Tools:</strong> Full access to F12 debugging tools</li>
+                        <li>📱 <strong>Device Emulation:</strong> Test mobile, tablet, and desktop views</li>
+                        <li>📏 <strong>Responsive Testing:</strong> Resize browser window to test different screen sizes</li>
+                        <li>🐛 <strong>Console Debugging:</strong> Direct access to browser console</li>
+                        <li>🔍 <strong>Network Monitoring:</strong> Monitor network requests and performance</li>
+                        <li>⚡ <strong>Performance Analysis:</strong> Use browser profiling tools</li>
+                    </ul>
+                </div>
+
+                <div class="help-card">
+                    <h3>How to Enable New Tab Mode</h3>
+                    <ol>
+                        <li>Click the <strong>⚙️</strong> configuration icon next to "Available Pages"</li>
+                        <li>Check <strong>"Display Custom Page in new Tab"</strong></li>
+                        <li>Click <strong>"Save"</strong></li>
+                        <li>Now when you click on pages, they'll open in new tabs</li>
+                    </ol>
+                </div>
+            </section>
+
+            <section class="help-section">
+                <h2>💡 Tips & Best Practices</h2>
+                <div class="help-card">
+                    <h3>Development Workflow</h3>
+                    <ul>
+                        <li>Start with <strong>Inline Mode</strong> for quick testing</li>
+                        <li>Switch to <strong>New Tab Mode</strong> for detailed debugging</li>
+                        <li>Use browser developer tools to inspect and modify your pages</li>
+                        <li>Test responsive design by resizing the browser window</li>
+                    </ul>
+                </div>
+
+                <div class="help-card">
+                    <h3>Variable Set Organization</h3>
+                    <ul>
+                        <li>Create sets for different modes</li>
+                        <li>Use descriptive names for your variable sets</li>
+                        <li>Test edge cases with empty or minimal variable sets</li>
+                    </ul>
+                </div>
+
+                <div class="help-card">
+                    <h3>Page Development</h3>
+                    <ul>
+                        <li>Always send a <code>READY</code> message when your page loads</li>
+                        <li>Handle cases where no variables are provided</li>
+                        <li>Use responsive CSS for different screen sizes</li>
+                        <li>Test your pages in both display modes</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="help-section">
+                <h2>🆘 Troubleshooting</h2>
+                <div class="help-card">
+                    <h3>Common Issues</h3>
+                    <ul>
+                        <li><strong>Page not appearing:</strong> Ensure your page directory contains an <code>index.html</code> file</li>
+                        <li><strong>Variables not received:</strong> Check that your page sends a <code>READY</code> message</li>
+                        <li><strong>Styling issues:</strong> Use New Tab Mode to access browser developer tools</li>
+                        <li><strong>JavaScript errors:</strong> Check the browser console in New Tab Mode</li>
+                    </ul>
+                </div>
+            </section>
+        </main>
+
+        <footer class="help-footer">
+            <p>Need more help? Check the browser console for debugging information.</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('serve_static', filename='js/help.js') }}"></script>
+</body>
+</html>

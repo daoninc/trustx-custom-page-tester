@@ -1,0 +1,230 @@
+/* Help Page Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+}
+
+.help-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: white;
+    min-height: 100vh;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.help-header {
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    color: white;
+    padding: 2rem;
+    position: relative;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.help-header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 0;
+}
+
+.close-help-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.close-help-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
+.help-content {
+    padding: 2rem;
+}
+
+.help-section {
+    margin-bottom: 3rem;
+}
+
+.help-section h2 {
+    color: #4f46e5;
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 3px solid #4f46e5;
+    padding-bottom: 0.5rem;
+}
+
+.help-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.help-card:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.help-card h3 {
+    color: #2d3748;
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.help-card p {
+    margin-bottom: 1rem;
+    color: #4a5568;
+}
+
+.help-card ul, .help-card ol {
+    margin-left: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.help-card li {
+    margin-bottom: 0.5rem;
+    color: #4a5568;
+}
+
+.help-card strong {
+    color: #2d3748;
+    font-weight: 600;
+}
+
+.code-block {
+    background: #1a202c;
+    color: #e2e8f0;
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1rem 0;
+    overflow-x: auto;
+    border: 1px solid #2d3748;
+}
+
+.code-block pre {
+    margin: 0;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+code {
+    background: #f1f5f9;
+    color: #e53e3e;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 0.9rem;
+}
+
+.help-footer {
+    background: #f7fafc;
+    padding: 2rem;
+    text-align: center;
+    color: #718096;
+    border-top: 1px solid #e2e8f0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .help-container {
+        margin: 0;
+        box-shadow: none;
+    }
+    
+    .help-header {
+        padding: 1.5rem;
+    }
+    
+    .help-header h1 {
+        font-size: 2rem;
+    }
+    
+    .help-content {
+        padding: 1rem;
+    }
+    
+    .help-section h2 {
+        font-size: 1.5rem;
+    }
+    
+    .help-card {
+        padding: 1rem;
+    }
+    
+    .code-block {
+        padding: 0.75rem;
+        font-size: 0.8rem;
+    }
+}
+
+/* Animation for smooth appearance */
+.help-container {
+    animation: slideIn 0.5s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Highlight important sections */
+.help-card:nth-child(odd) {
+    border-left: 4px solid #4f46e5;
+}
+
+.help-card:nth-child(even) {
+    border-left: 4px solid #7c3aed;
+}
+
+/* Icon styles */
+.help-section h2::before {
+    content: '';
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    background-size: contain;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+}
+
+.help-section:nth-child(2) h2::before { content: '📁'; }
+.help-section:nth-child(3) h2::before { content: '🔧'; }
+.help-section:nth-child(4) h2::before { content: '🖥️'; }
+.help-section:nth-child(5) h2::before { content: '💡'; }
+.help-section:nth-child(6) h2::before { content: '🆘'; }

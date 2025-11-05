@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enter Verification Code</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        .code-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: var(--accent-color);
+        }
+        
+        .code-form {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .subtitle-email {
+            color: var(--text-secondary);
+            margin-bottom: 0rem;
+        }
+        
+        .email-display {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            text-align: center;
+        }
+        
+        .code-inputs {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+        
+        .code-input {
+            width: 3rem;
+            height: 3.5rem;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 600;
+            border: 1px solid var(--input-border);
+            border-radius: 0.5rem;
+            background-color: var(--input-bg);
+            color: var(--text-primary);
+            transition: border-color 0.2s ease;
+        }
+        
+        .code-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+        
+        .code-input.error {
+            border-color: var(--error-color);
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            margin-bottom: 1.5rem;
+        }
+        
+        .submit-btn:hover {
+            background-color: var(--accent-hover);
+        }
+        
+        .submit-btn:disabled {
+            background-color: var(--input-bg);
+            color: var(--text-secondary);
+            cursor: not-allowed;
+        }
+
+        .action-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .action-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 0.2s ease;
+            cursor: pointer;
+        }
+
+        .action-link:hover {
+            color: var(--text-primary);
+        }
+
+        .action-link:not(:last-child)::after {
+            content: "•";
+            margin-left: 1rem;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="code-icon">🔐</div>
+            <h1>Enter Verification Code</h1>
+            <p class="subtitle-email">We've sent a 6-digit code to your email address:</p>
+
+            <div class="email-display" id="emailDisplay">john.doe@gmail.com</div>
+
+            <form id="codeForm" class="code-form">
+                <div class="code-inputs">
+                    <input type="text" class="code-input" maxlength="1" pattern="[0-9]" inputmode="numeric" required>
+                    <input type="text" class="code-input" maxlength="1" pattern="[0-9]" inputmode="numeric" required>
+                    <input type="text" class="code-input" maxlength="1" pattern="[0-9]" inputmode="numeric" required>
+                    <input type="text" class="code-input" maxlength="1" pattern="[0-9]" inputmode="numeric" required>
+                    <input type="text" class="code-input" maxlength="1" pattern="[0-9]" inputmode="numeric" required>
+                    <input type="text" class="code-input" maxlength="1" pattern="[0-9]" inputmode="numeric" required>
+                </div>
+                
+                <button type="submit" class="submit-btn" id="submitBtn" disabled>Continue</button>
+            </form>
+            
+            <div class="action-links">
+                <a id="reenterEmailBtn" class="action-link">Reenter Email</a>
+                <a id="resendCodeBtn" class="action-link">Resend Code</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Notify parent when page is loaded
+        window.addEventListener('load', () => {
+            window.parent.postMessage({ event: 'READY' }, '*');
+        });
+
+        const form = document.getElementById('codeForm');
+        const inputs = form.querySelectorAll('.code-input');
+        const submitBtn = document.getElementById('submitBtn');
+        const reenterEmailBtn = document.getElementById('reenterEmailBtn');
+        const resendCodeBtn = document.getElementById('resendCodeBtn');
+        const emailDisplay = document.getElementById('emailDisplay');
+
+        // Get email from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const email = urlParams.get('email');
+        if (email) {
+            emailDisplay.textContent = `Code sent to: ${email}`;
+        }
+
+        // Handle input in code boxes
+        inputs.forEach((input, index) => {
+            // Only allow numbers
+            input.addEventListener('input', (e) => {
+                const value = e.target.value;
+                if (value && !/^\d$/.test(value)) {
+                    e.target.value = '';
+                    return;
+                }
+
+                // Move to next input if a digit is entered
+                if (value && index < inputs.length - 1) {
+                    inputs[index + 1].focus();
+                }
+
+                // Check if all inputs are filled
+                const allFilled = Array.from(inputs).every(input => input.value.length === 1);
+                submitBtn.disabled = !allFilled;
+            });
+
+            // Handle backspace
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && !input.value && index > 0) {
+                    inputs[index - 1].focus();
+                }
+            });
+
+            // Handle paste
+            input.addEventListener('paste', (e) => {
+                e.preventDefault();
+                const pastedData = e.clipboardData.getData('text').slice(0, 6);
+                if (/^\d+$/.test(pastedData)) {
+                    pastedData.split('').forEach((digit, i) => {
+                        if (inputs[i]) {
+                            inputs[i].value = digit;
+                        }
+                    });
+                    submitBtn.disabled = false;
+                    if (inputs[pastedData.length]) {
+                        inputs[pastedData.length].focus();
+                    }
+                }
+            });
+        });
+
+        // Form submission handler
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const code = Array.from(inputs).map(input => input.value).join('');
+            window.parent.postMessage({ 
+                event: 'SEND', 
+                variables: { 
+                    code: code,
+                    message: 'continue'
+                }
+            }, '*');
+        });
+
+        // Reenter email handler
+        reenterEmailBtn.addEventListener('click', () => {
+            window.parent.postMessage({ 
+                event: 'SEND', 
+                variables: { 
+                    message: 'reenter'
+                }
+            }, '*');
+        });
+
+        // Resend code handler
+        resendCodeBtn.addEventListener('click', () => {
+            window.parent.postMessage({ 
+                event: 'SEND', 
+                variables: { 
+                    message: 'resend'
+                }
+            }, '*');
+        });
+    </script>
+</body>
+</html> 

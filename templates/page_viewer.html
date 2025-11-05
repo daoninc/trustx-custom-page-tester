@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Page Viewer</title>
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('serve_static', filename='favicon.svg') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('serve_static', filename='favicon.ico') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1a1a1a;
+            color: #ffffff;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .iframe-container {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background-color: #1a1a1a;
+        }
+
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #666;
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="iframe-container">
+        <div class="loading" id="loadingMessage">Loading page...</div>
+        <iframe id="pageFrame" src="about:blank"></iframe>
+    </div>
+
+    <script>
+        // Cross-tab messaging using BroadcastChannel
+        const channel = new BroadcastChannel('custom-page-handler');
+        const pageFrame = document.getElementById('pageFrame');
+        const loadingMessage = document.getElementById('loadingMessage');
+        let currentPageUrl = null;
+
+        // Listen for messages from the main page
+        channel.addEventListener('message', (event) => {
+            const { type, data } = event.data;
+            
+            switch (type) {
+                case 'LOAD_PAGE':
+                    loadPage(data.url);
+                    break;
+                case 'SEND_MESSAGE':
+                    sendMessageToIframe(data.message);
+                    break;
+                case 'CLOSE_TAB':
+                    window.close();
+                    break;
+            }
+        });
+
+        // Load a page in the iframe
+        function loadPage(url) {
+            currentPageUrl = url;
+            loadingMessage.style.display = 'block';
+            pageFrame.src = url;
+            
+            // Hide loading message when iframe loads
+            pageFrame.onload = () => {
+                loadingMessage.style.display = 'none';
+            };
+        }
+
+        // Send message to the iframe
+        function sendMessageToIframe(message) {
+            if (pageFrame.src !== 'about:blank') {
+                try {
+                    pageFrame.contentWindow.postMessage(message, '*');
+                } catch (error) {
+                    console.error('Error sending message to iframe:', error);
+                }
+            }
+        }
+
+        // Handle messages from the iframe and forward to main page
+        window.addEventListener('message', (event) => {
+            // Forward iframe messages to the main page
+            channel.postMessage({
+                type: 'IFRAME_MESSAGE',
+                data: event.data
+            });
+        });
+
+        // Notify main page that this tab is ready
+        channel.postMessage({
+            type: 'TAB_READY',
+            data: { tabId: Date.now() }
+        });
+
+        // Handle page unload
+        window.addEventListener('beforeunload', () => {
+            channel.postMessage({
+                type: 'TAB_CLOSED',
+                data: { url: currentPageUrl }
+            });
+        });
+    </script>
+</body>
+</html>
